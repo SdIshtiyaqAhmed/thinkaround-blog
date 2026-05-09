@@ -1,3 +1,5 @@
+<img width="762" height="409" alt="image" src="https://github.com/user-attachments/assets/96a3c9fa-ee58-4d00-8df6-b756b5b3c6f1" />
+
 # ThinkAround
 
 A minimalist, ethical, and distraction-free digital journal designed for high-focus reading and a premium user experience. **ThinkAround** prioritizes accessibility, privacy, and aesthetic tranquility. ThinkAround is a calm, thoughtful, minimalist blog focused on technology, society, productivity, sustainability, AI, education, economics, and everyday observations.
