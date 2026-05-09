@@ -11,7 +11,7 @@ if (!fs.existsSync('share')) {
 }
 
 // Ensure the base URL matches the production GitHub Pages URL
-const BASE_URL = 'https://sdishtiyaqahmed.github.io/Portfolio-Website';
+const BASE_URL = 'https://sdishtiyaqahmed.github.io/thinkaround-blog';
 
 const template = (post) => `<!DOCTYPE html>
 <html lang="en">
@@ -33,13 +33,13 @@ const template = (post) => `<!DOCTYPE html>
   <meta name="twitter:image" content="${BASE_URL}/${post.coverImage || 'images/default-cover.jpg'}">
 
   <!-- Instant Redirect to the SPA -->
-  <meta http-equiv="refresh" content="0;url=../index.html#/post/${post.slug}">
+  <meta http-equiv="refresh" content="0;url=${BASE_URL}/post.html#/post/${post.slug}">
   <script>
-    window.location.replace("../index.html#/post/${post.slug}");
+    window.location.replace("${BASE_URL}/post.html#/post/${post.slug}");
   </script>
 </head>
 <body>
-  <p>Redirecting to article: <a href="../index.html#/post/${post.slug}">${post.title}</a>...</p>
+  <p>Redirecting to article: <a href="${BASE_URL}/post.html#/post/${post.slug}">${post.title}</a>...</p>
 </body>
 </html>`;
 
