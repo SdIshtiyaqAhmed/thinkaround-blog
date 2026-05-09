@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Search ThinkAround articles by title, summary, and metadata." />
+  <title>Search - ThinkAround</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/search.css" />
+</head>
+<body data-page="search">
+  <div id="progress-bar"></div>
+  <div class="app-shell">
+    <header class="topbar" role="banner">
+      <div class="brand">
+        <a href="index.html">ThinkAround</a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
+        <a href="index.html">Home</a>
+        <a href="search.html" class="active">Search</a>
+        <a href="index.html#about">About</a>
+        <button id="theme-toggle" type="button" aria-pressed="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-light"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-dark" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <span>Theme</span>
+        </button>
+        <button id="focus-toggle" type="button" aria-pressed="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 9-9 9-9-9z"></path></svg>
+          <span>Focus</span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="content" class="content" tabindex="-1">
+      <section class="search-hero">
+        <p class="featured-label">Search</p>
+        <h1 class="featured-title">Find articles on ThinkAround</h1>
+        <p class="featured-summary">Search for thoughtful writing on technology, society, systems, and ideas.</p>
+      </section>
+
+      <section class="search-controls">
+        <div class="search-row">
+          <label class="search-field">
+            Search articles
+            <input id="search-query" type="search" placeholder="Search by title, summary, tags, or author" />
+          </label>
+          <label class="search-field">
+            Sort by
+            <select id="sort-select">
+              <option value="date-newest">Newest first</option>
+              <option value="date-oldest">Oldest first</option>
+              <option value="views-desc">Most Viewed</option>
+              <option value="shares-desc">Most Shared</option>
+              <option value="title-asc">Title A-Z</option>
+              <option value="title-desc">Title Z-A</option>
+              <option value="time-asc">Reading time up</option>
+              <option value="time-desc">Reading time down</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="filter-panel">
+          <div class="filter-heading">Filter tags</div>
+          <div id="tag-filters" class="tag-filter-list"></div>
+        </div>
+      </section>
+
+      <div id="search-summary" class="search-summary"></div>
+      <div id="search-results" class="search-results">
+        <!-- Search results will be rendered here -->
+      </div>
+    </main>
+
+    <footer class="site-foot">
+      <p class="site-note">ThinkAround</p>
+    </footer>
+  </div>
+
+  <script src="js/search.js"></script>
+  <script src="js/accessibility.js" defer></script>
+  <script src="js/security.js" defer></script>
+</body>
+</html>

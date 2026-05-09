@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown Previewer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #edf4ec;
+      --surface: #ffffff;
+      --surface-soft: rgba(39, 87, 63, 0.08);
+      --text: #182c1f;
+      --muted: #45594a;
+      --accent: #275a40;
+      --border: #c9d9ce;
+      --shadow: rgba(39, 87, 63, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      color: var(--text);
+      background: var(--background);
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: 2px solid transparent;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 100%;
+      resize: none;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--surface);
+      color: var(--text);
+      padding: 1rem;
+      line-height: 1.7;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 1rem;
+      padding: 1.25rem;
+    }
+
+    .topbar,
+    .workspace-panel,
+    .json-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      box-shadow: 0 18px 40px var(--shadow);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-block h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      color: var(--accent);
+    }
+
+    .brand-block p {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .workspace-panel,
+    .json-panel {
+      padding: 1rem;
+    }
+
+    .meta-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .field label {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.85rem 1rem;
+      font: inherit;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1rem;
+      min-height: 0;
+    }
+
+    .pane {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .pane-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 0.2rem;
+    }
+
+    .pane-head h2,
+    .json-panel h2 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .editor-input {
+      flex: 1;
+      min-height: 28rem;
+    }
+
+    .preview-surface,
+    .json-output {
+      flex: 1;
+      overflow: auto;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--surface-soft);
+    }
+
+    .preview-surface h1,
+    .preview-surface h2,
+    .preview-surface h3,
+    .preview-surface h4 {
+      margin: 0 0 1rem;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .preview-surface h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+    }
+
+    .preview-surface h2 {
+      margin-top: 2rem;
+      font-size: 1.6rem;
+    }
+
+    .preview-surface h3 {
+      margin-top: 1.6rem;
+      font-size: 1.3rem;
+    }
+
+    .preview-surface p,
+    .preview-surface ul,
+    .preview-surface ol,
+    .preview-surface pre,
+    .preview-surface blockquote {
+      margin: 0 0 1.25rem;
+    }
+
+    .preview-surface ul,
+    .preview-surface ol {
+      padding-left: 1.5rem;
+    }
+
+    .preview-surface blockquote {
+      padding-left: 1rem;
+      border-left: 2px solid var(--border);
+      color: var(--muted);
+    }
+
+    .preview-surface pre {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.9rem;
+      background: rgba(24, 44, 31, 0.08);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .preview-surface pre code {
+      display: block;
+      white-space: pre;
+      word-break: normal;
+      overflow-wrap: normal;
+    }
+
+    .preview-surface code,
+    .json-output code {
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .preview-surface img {
+      display: block;
+      max-width: 100%;
+      border-radius: 0.9rem;
+      margin: 1.5rem 0;
+    }
+
+    .preview-surface a {
+      color: var(--accent);
+    }
+
+    .json-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .json-output {
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 7rem;
+    }
+
+    .status-line {
+      min-height: 1.4rem;
+      color: var(--muted);
+      padding: 0 0.25rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .meta-panel,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .editor-input {
+        min-height: 18rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <h1>Markdown Previewer</h1>
+        <p>Write markdown on the left, preview it on the right, and export it as JSON.</p>
+      </div>
+      <div class="toolbar">
+        <button type="button" id="copy-json-button">Copy JSON</button>
+        <button type="button" id="load-json-button">Load JSON</button>
+      </div>
+    </header>
+
+    <section class="workspace-panel">
+      <div class="meta-panel">
+        <div class="field">
+          <label for="title-input">Title</label>
+          <input id="title-input" type="text" placeholder="Write a title to generate a slug" />
+        </div>
+        <div class="field">
+          <label for="slug-output">Slug</label>
+          <input id="slug-output" type="text" readonly />
+        </div>
+      </div>
+
+      <div class="workspace">
+        <div class="pane">
+          <div class="pane-head">
+            <h2>Markdown</h2>
+          </div>
+          <textarea id="markdown-input" class="editor-input" spellcheck="false"></textarea>
+        </div>
+        <div class="pane">
+          <div class="pane-head">
+            <h2>Preview</h2>
+          </div>
+          <div id="preview-output" class="preview-surface"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="json-panel">
+      <h2>JSON Output</h2>
+      <pre id="json-output" class="json-output"><code></code></pre>
+    </section>
+
+    <div class="status-line" id="status-line"></div>
+  </div>
+
+  <input id="json-file-input" type="file" accept=".json,application/json" class="hidden" />
+
+  <script>
+    const titleInput = document.getElementById('title-input');
+    const slugOutput = document.getElementById('slug-output');
+    const markdownInput = document.getElementById('markdown-input');
+    const previewOutput = document.getElementById('preview-output');
+    const jsonOutput = document.querySelector('#json-output code');
+    const copyJsonButton = document.getElementById('copy-json-button');
+    const loadJsonButton = document.getElementById('load-json-button');
+    const jsonFileInput = document.getElementById('json-file-input');
+    const statusLine = document.getElementById('status-line');
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, function (char) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[char];
+      });
+    }
+
+    function parseInline(text) {
+      let html = escapeHtml(text);
+      const codeTokens = [];
+
+      html = html.replace(/`([^`]+)`/g, function (match, code) {
+        const token = '%%CODE_' + codeTokens.length + '%%';
+        codeTokens.push('<code>' + code + '</code>');
+        return token;
+      });
+
+      html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (match, alt, src) {
+        return '<img src="' + escapeHtml(src) + '" alt="' + escapeHtml(alt) + '" />';
+      });
+
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (match, label, href) {
+        return '<a href="' + escapeHtml(href) + '">' + label + '</a>';
+      });
+
+      html = html
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/__([^_]+)__/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/_([^_]+)_/g, '<em>$1</em>');
+
+      codeTokens.forEach(function (token, index) {
+        html = html.replace('%%CODE_' + index + '%%', token);
+      });
+
+      return html;
+    }
+
+    function slugify(value) {
+      return value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function parseMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+      const html = [];
+      let paragraph = [];
+      let listType = '';
+      let inCodeBlock = false;
+      let codeLines = [];
+
+      function flushParagraph() {
+        if (!paragraph.length) return;
+        html.push('<p>' + parseInline(paragraph.join(' ')) + '</p>');
+        paragraph = [];
+      }
+
+      function closeList() {
+        if (!listType) return;
+        html.push('</' + listType + '>');
+        listType = '';
+      }
+
+      function flushCodeBlock() {
+        if (!inCodeBlock) return;
+        html.push('<pre><code>' + escapeHtml(codeLines.join('\n')) + '</code></pre>');
+        inCodeBlock = false;
+        codeLines = [];
+      }
+
+      lines.forEach(function (rawLine) {
+        const line = rawLine.trimEnd();
+        const trimmed = line.trim();
+
+        if (trimmed.startsWith('```')) {
+          flushParagraph();
+          closeList();
+          if (inCodeBlock) {
+            flushCodeBlock();
+          } else {
+            inCodeBlock = true;
+            codeLines = [];
+          }
+          return;
+        }
+
+        if (inCodeBlock) {
+          codeLines.push(rawLine);
+          return;
+        }
+
+        const hrMatch = trimmed.match(/^([-*_])\s*\1\s*\1[\s-*_]*$/);
+        const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+        const unorderedMatch = trimmed.match(/^[-*]\s+(.*)$/);
+        const orderedMatch = trimmed.match(/^\d+\.\s+(.*)$/);
+        const quoteMatch = trimmed.match(/^>\s+(.*)$/);
+
+        if (hrMatch) {
+          flushParagraph();
+          closeList();
+          html.push('<hr />');
+          return;
+        }
+
+        if (headingMatch) {
+          flushParagraph();
+          closeList();
+          const level = Math.min(6, headingMatch[1].length);
+          html.push('<h' + level + '>' + parseInline(headingMatch[2]) + '</h' + level + '>');
+          return;
+        }
+
+        if (quoteMatch) {
+          flushParagraph();
+          closeList();
+          html.push('<blockquote>' + parseInline(quoteMatch[1]) + '</blockquote>');
+          return;
+        }
+
+        if (unorderedMatch || orderedMatch) {
+          flushParagraph();
+          const nextType = unorderedMatch ? 'ul' : 'ol';
+          const itemText = unorderedMatch ? unorderedMatch[1] : orderedMatch[1];
+          if (listType && listType !== nextType) {
+            closeList();
+          }
+          if (!listType) {
+            listType = nextType;
+            html.push('<' + listType + '>');
+          }
+          html.push('<li>' + parseInline(itemText) + '</li>');
+          return;
+        }
+
+        if (!trimmed) {
+          flushParagraph();
+          closeList();
+          return;
+        }
+
+        paragraph.push(trimmed);
+      });
+
+      flushParagraph();
+      closeList();
+      flushCodeBlock();
+      return html.join('');
+    }
+
+    function getJsonPayload() {
+      return {
+        slug: slugOutput.value,
+        content: markdownInput.value
+      };
+    }
+
+    function buildExportJson() {
+      return JSON.stringify(getJsonPayload(), null, 2);
+    }
+
+    function updateStatus(message) {
+      statusLine.textContent = message;
+    }
+
+    function updateJsonOutput() {
+      jsonOutput.textContent = buildExportJson();
+    }
+
+    function updateSlug() {
+      slugOutput.value = slugify(titleInput.value);
+    }
+
+    function updatePreview() {
+      const markdown = markdownInput.value.trim()
+        ? markdownInput.value
+        : '# Markdown Previewer\n\nStart writing on the left.';
+      updateSlug();
+      previewOutput.innerHTML = parseMarkdown(markdown);
+      updateJsonOutput();
+    }
+
+    function copyJson() {
+      const json = buildExportJson();
+      navigator.clipboard.writeText(json).then(function () {
+        updateStatus('JSON copied to clipboard.');
+      }).catch(function () {
+        updateStatus('Could not copy JSON automatically.');
+      });
+    }
+
+    function populateFromJson(data) {
+      if (!data || typeof data !== 'object') {
+        updateStatus('Invalid JSON structure.');
+        return;
+      }
+
+      titleInput.value = typeof data.title === 'string'
+        ? data.title
+        : (typeof data.slug === 'string' ? data.slug.replace(/-/g, ' ') : '');
+      markdownInput.value = typeof data.content === 'string' ? data.content : '';
+      updatePreview();
+      updateStatus('JSON file loaded.');
+    }
+
+    function loadJsonFile(file) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        try {
+          const data = JSON.parse(event.target.result);
+          populateFromJson(data);
+        } catch (error) {
+          updateStatus('Could not parse JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    titleInput.addEventListener('input', function () {
+      updatePreview();
+      updateStatus('');
+    });
+
+    markdownInput.addEventListener('input', function () {
+      updatePreview();
+      updateStatus('');
+    });
+
+    copyJsonButton.addEventListener('click', copyJson);
+
+    loadJsonButton.addEventListener('click', function () {
+      jsonFileInput.click();
+    });
+
+    jsonFileInput.addEventListener('change', function () {
+      const file = jsonFileInput.files && jsonFileInput.files[0];
+      if (file) {
+        loadJsonFile(file);
+      }
+      jsonFileInput.value = '';
+    });
+
+    titleInput.value = 'Markdown Previewer';
+    markdownInput.value = '# Markdown Previewer\n\nWrite your markdown here.\n\n- Live preview\n- JSON output\n- Auto slug from title\n\n```json\n{\n  "slug": \"markdown-previewer\",\n  "content": \"markdownCodeHere\"\n}\n```';
+    updatePreview();
+  </script>
+</body>
+</html>

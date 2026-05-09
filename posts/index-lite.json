@@ -1,0 +1,54 @@
+{
+  "posts": [
+    {
+      "title": "How I developed my very own Portfolio Website using HTML, CSS, and JavaScript",
+      "date": "2025-09-18",
+      "author": "Syed Ishtiyaq Ahmed",
+      "readingTime": 5,
+      "tags": ["WebDevelopment", "Beginner", "CSS", "JavaScript"],
+      "summary": "Have you ever felt overwhelmed by the extensive use of frameworks and advanced technologies to build a simple portfolio website? Same here, which is why I chose to keep things simple by developing it using only HTML, CSS, and JavaScript.",
+      "slug": "how-i-developed-my-very-own-portfolio-website-using-html-css-and-javascript",
+      "coverImage": "images/cover/how-i-developed-my-very-own-portfolio-website-using-html-css-and-javascript.webp"
+    },
+    {
+      "title": "Rethinking Focus Apps: An Awareness-Based Approach Instead of Blocking",
+      "date": "2026-05-03",
+      "author": "Syed Ishtiyaq Ahmed",
+      "readingTime": 6,
+      "tags": ["AI", "Productivity", "OpenSource", "Programming"],
+      "summary": "Most focus tools rely on blocking distractions, but this approach often fails to address the root cause. This article explores an awareness-based system that helps users recognize attention shifts and make intentional decisions instead of enforcing restrictions.",
+      "slug": "rethinking-focus-apps-awareness-based-approach",
+      "coverImage": "images/cover/rethinking-focus-apps-awareness-based-approach.webp"
+    },
+    {
+      "title": "Sustainable Cooling: Telangana Cool Roof Policy 2023-2028",
+      "date": "2025-12-16",
+      "author": "Syed Ishtiyaq Ahmed",
+      "readingTime": 4,
+      "tags": ["Sustainability", "Environment", "Policy", "Climate", "Energy"],
+      "summary": "With rising temperatures and increasing energy demand, Telangana's Cool Roof Policy (2023-2028) promotes heat-reflective materials as a simple, cost-effective solution to reduce indoor heat and environmental impact.",
+      "slug": "sustainable-cooling-telangana-cool-roof-policy",
+      "coverImage": "images/cover/sustainable-cooling-telangana-cool-roof-policy.webp"
+    },
+    {
+      "title": "Tragedy of the Commons: Streets and Parking",
+      "date": "2025-12-09",
+      "author": "Syed Ishtiyaq Ahmed",
+      "readingTime": 4,
+      "tags": ["UrbanPlanning", "Economics", "PublicPolicy", "Transportation"],
+      "summary": "Improper roadside parking in urban areas reflects the tragedy of the commons, where shared spaces are overused. Structured planning and valuing parking spaces can help reduce congestion and improve urban life.",
+      "slug": "tragedy-of-the-commons-streets-and-parking",
+      "coverImage": "images/cover/tragedy-of-the-commons-streets-and-parking.webp"
+    },
+    {
+      "title": "The Rise of Artificial Intelligence and Education",
+      "date": "2025-11-24",
+      "author": "Syed Ishtiyaq Ahmed",
+      "readingTime": 6,
+      "tags": ["ArtificialIntelligence", "Education", "Technology", "Future"],
+      "summary": "Artificial Intelligence is transforming education by enabling personalised learning, automation, and accessibility. This article explores the history of education, evolution of AI, its role in learning, and the challenges that come with it.",
+      "slug": "the-rise-of-artificial-intelligence-and-education",
+      "coverImage": "images/cover/the-rise-of-artificial-intelligence-and-education.webp"
+    }
+  ]
+}
