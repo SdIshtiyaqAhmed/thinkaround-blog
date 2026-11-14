@@ -59,7 +59,22 @@
       "summary": "Many organisations hoped Artificial Intelligence would reduce costs by replacing human workers. However, recent experiences suggest that AI is most effective when used alongside people rather than as a complete replacement.",
       "slug": "the-ai-replacement-trap-human-plus-ai-future",
       "coverImage": "images/cover/the-ai-replacement-trap-human-plus-ai-future.webp"
-    }
+    },
+    {
+  "title": "Information-Guided Computational Allocation for Spacecraft Trajectory Refinement",
+  "date": "2026-11-14",
+  "readingTime": 6,
+  "tags": [
+    "ArtificialIntelligence",
+    "MachineLearning",
+    "SpaceResearch",
+    "TrajectoryOptimization",
+    "NumericalSimulation"
+  ],
+  "summary": "An exploration of how gravitational field information and machine learning can guide computational refinement across spacecraft trajectory regions. The study compares learned allocation with alternative strategies through controlled numerical experiments, examining both trajectory objectives and computational runtime.",
+  "slug": "information-guided-computational-allocation-spacecraft-trajectory-refinement",
+  "coverImage": "images/cover/information-guided-computational-allocation-spacecraft-trajectory-refinement.webp"
+}
 
   ]
 }
